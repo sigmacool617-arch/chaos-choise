@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "chaoschoice",
+    "name": "Chaos Choice",
+    "description": "Каждую минуту игра предлагает два случайных «хаоса». Внизу идёт отсчёт 60 секунд — успей выбрать.",
+    "version": "${version}",
+    "mcversion": "1.7.10",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Narezany"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": ""
+  }
+]
