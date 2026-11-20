@@ -1,6 +1,6 @@
 package com.narezany.chaoschoice.network;
 
-import java.io.IOException;
+import java.nio.charset.Charset;
 
 import com.narezany.chaoschoice.ChaosChoice;
 
@@ -11,6 +11,8 @@ import io.netty.buffer.ByteBuf;
 
 /** Сервер → клиент: состояние волны для полоски внизу. */
 public class PacketWave implements IMessage {
+
+    private static final Charset UTF8 = Charset.forName("UTF-8");
 
     /** 0 — до волны N секунд, 1 — идёт выбор. */
     public int state;
@@ -30,15 +32,10 @@ public class PacketWave implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        try {
-            state = buf.readByte();
-            seconds = buf.readInt();
-            shortA = readString(buf);
-            shortB = readString(buf);
-        } catch (IOException e) {
-            shortA = "";
-            shortB = "";
-        }
+        state = buf.readByte();
+        seconds = buf.readInt();
+        shortA = readString(buf);
+        shortB = readString(buf);
     }
 
     @Override
@@ -49,22 +46,23 @@ public class PacketWave implements IMessage {
         writeString(buf, shortB);
     }
 
-    static String readString(ByteBuf buf) throws IOException {
+    static String readString(ByteBuf buf) {
         int len = buf.readInt();
-        if (len < 0 || len > 4096) {
-            throw new IOException("bad string length");
+        if (len < 0) {
+            len = 0;
         }
-        char[] chars = new char[len];
-        for (int i = 0; i < len; i++) {
-            chars[i] = buf.readChar();
+        if (len > 2048) {
+            len = 2048;
         }
-        return new String(chars);
+        byte[] bytes = new byte[len];
+        buf.readBytes(bytes);
+        return new String(bytes, UTF8);
     }
 
     static void writeString(ByteBuf buf, String text) {
-        String value = text == null ? "" : text;
-        buf.writeInt(value.length());
-        buf.writeChars(value);
+        byte[] bytes = (text == null ? "" : text).getBytes(UTF8);
+        buf.writeInt(bytes.length);
+        buf.writeBytes(bytes);
     }
 
     public static class Handler implements IMessageHandler<PacketWave, IMessage> {

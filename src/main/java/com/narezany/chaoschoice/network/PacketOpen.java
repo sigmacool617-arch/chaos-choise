@@ -1,7 +1,5 @@
 package com.narezany.chaoschoice.network;
 
-import java.io.IOException;
-
 import com.narezany.chaoschoice.ChaosChoice;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -27,14 +25,9 @@ public class PacketOpen implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        try {
-            nameA = PacketWave.readString(buf);
-            nameB = PacketWave.readString(buf);
-            seconds = buf.readInt();
-        } catch (IOException e) {
-            nameA = "";
-            nameB = "";
-        }
+        nameA = PacketWave.readString(buf);
+        nameB = PacketWave.readString(buf);
+        seconds = buf.readInt();
     }
 
     @Override
