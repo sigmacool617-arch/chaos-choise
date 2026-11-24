@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "fastbuild",
+    "name": "FastBuild",
+    "description": "Палочка быстрого строительства: два клика левой кнопкой задают углы, правый клик заполняет область выбранным блоком.",
+    "version": "${version}",
+    "mcversion": "1.7.10",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Narezany"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": ""
+  }
+]
