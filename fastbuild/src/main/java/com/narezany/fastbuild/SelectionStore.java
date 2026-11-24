@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
@@ -147,10 +149,75 @@ public final class SelectionStore {
         }
 
         int meta = world.getBlockMetadata(x, y, z);
+
+        Item item = Item.getItemFromBlock(block);
+        if (item == null) {
+            msg(player, "§6[Стройка] §7у этого блока нет предмета — нечем платить.");
+            return;
+        }
+
+        int itemDamage = block.damageDropped(meta);
+        boolean creative = player.capabilities != null && player.capabilities.isCreativeMode;
+
+        if (!creative) {
+            int have = count(player, item, itemDamage);
+            if (have < volume) {
+                msg(player, "§6[Стройка] §cне хватает: нужно §f" + volume
+                        + " §cштук, в инвентаре §f" + have + "§c.");
+                return;
+            }
+            if (!consume(player, item, itemDamage, volume)) {
+                msg(player, "§6[Стройка] §7не удалось списать блоки — ничего не строю.");
+                return;
+            }
+        }
+
         FillJobs.add(world, sel.minX(), minY, sel.minZ(), sel.maxX(), maxY, sel.maxZ(), block, meta);
-        msg(player, "§6[Стройка] §7заполняю §f" + volume + " §7блоков: §f" + block.getLocalizedName());
+        msg(player, "§6[Стройка] §7заполняю §f" + volume + " §7блоков: §f" + block.getLocalizedName()
+                + (creative ? "" : " §8(списано: " + volume + ")"));
 
         sel.clear();
+    }
+
+    /* ---------------- оплата материалом ---------------- */
+
+    /** Сколько подходящих предметов в инвентаре (без запаски/края сетки). */
+    private static int count(EntityPlayerMP player, Item item, int damage) {
+        ItemStack[] slots = player.inventory.mainInventory;
+        int sum = 0;
+        for (int i = 0; i < slots.length; i++) {
+            ItemStack stack = slots[i];
+            if (matches(stack, item, damage)) {
+                sum += stack.stackSize;
+            }
+        }
+        return sum;
+    }
+
+    /** Списывает ровно amount подходящих предметов. */
+    private static boolean consume(EntityPlayerMP player, Item item, int damage, int amount) {
+        ItemStack[] slots = player.inventory.mainInventory;
+        int left = amount;
+        for (int i = 0; i < slots.length && left > 0; i++) {
+            ItemStack stack = slots[i];
+            if (!matches(stack, item, damage)) {
+                continue;
+            }
+            int take = Math.min(left, stack.stackSize);
+            stack.stackSize -= take;
+            left -= take;
+            if (stack.stackSize <= 0) {
+                player.inventory.setInventorySlotContents(i, null);
+            }
+        }
+        return left == 0;
+    }
+
+    private static boolean matches(ItemStack stack, Item item, int damage) {
+        return stack != null
+                && stack.stackSize > 0
+                && stack.getItem() == item
+                && stack.getItemDamage() == damage;
     }
 
     /* ---------------- мелочи ---------------- */
