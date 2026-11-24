@@ -159,14 +159,23 @@ public final class SelectionStore {
         int itemDamage = block.damageDropped(meta);
         boolean creative = player.capabilities != null && player.capabilities.isCreativeMode;
 
+        // платим только за те блоки, которые реально появятся:
+        // уже стоящие на своих местах не в счёт
+        int toPlace = placeCount(world, sel, minY, maxY, block, meta);
+        if (toPlace == 0) {
+            msg(player, "§6[Стройка] §7там уже всё стоит — строить нечего.");
+            sel.clear();
+            return;
+        }
+
         if (!creative) {
             int have = count(player, item, itemDamage);
-            if (have < volume) {
-                msg(player, "§6[Стройка] §cне хватает: нужно §f" + volume
+            if (have < toPlace) {
+                msg(player, "§6[Стройка] §cне хватает: нужно §f" + toPlace
                         + " §cштук, в инвентаре §f" + have + "§c.");
                 return;
             }
-            if (!consume(player, item, itemDamage, volume)) {
+            if (!consume(player, item, itemDamage, toPlace)) {
                 msg(player, "§6[Стройка] §7не удалось списать блоки — ничего не строю.");
                 return;
             }
@@ -174,9 +183,25 @@ public final class SelectionStore {
 
         FillJobs.add(world, sel.minX(), minY, sel.minZ(), sel.maxX(), maxY, sel.maxZ(), block, meta);
         msg(player, "§6[Стройка] §7заполняю §f" + volume + " §7блоков: §f" + block.getLocalizedName()
-                + (creative ? "" : " §8(списано: " + volume + ")"));
+                + (creative ? "" : " §8(списано: " + toPlace + ")"));
 
         sel.clear();
+    }
+
+    /** Сколько блоков в области надо поставить (совпадающие не считаем). */
+    private static int placeCount(World world, Sel sel, int minY, int maxY, Block block, int meta) {
+        int need = 0;
+        for (int bx = sel.minX(); bx <= sel.maxX(); bx++) {
+            for (int bz = sel.minZ(); bz <= sel.maxZ(); bz++) {
+                for (int by = minY; by <= maxY; by++) {
+                    Block there = world.getBlock(bx, by, bz);
+                    if (there != block || world.getBlockMetadata(bx, by, bz) != meta) {
+                        need++;
+                    }
+                }
+            }
+        }
+        return need;
     }
 
     /* ---------------- оплата материалом ---------------- */
