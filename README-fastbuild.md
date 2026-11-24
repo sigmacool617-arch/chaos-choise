@@ -57,10 +57,11 @@ gradle -p fastbuild build
 
 - `FastBuild.java` — регистрация предмета, крафта, обработчиков;
 - `ItemBuilderStick.java` — предмет и правый клик;
-- `LeftClickHandler.java` — левый клик (отменяет ломание блока);
+- `LeftClickHandler.java` — левый клик (серверное событие `PlayerInteractEvent`,
+  отменяет ломание блока);
 - `SelectionStore.java` — точки и проверки;
 - `FillJobs.java` — порционное заполнение;
-- `network/` — пакет с координатами клика.
+- `ServerTicker.java` — разбор очереди кликов и порционная заливка в тиках.
 
 ## Chaos Choice
 

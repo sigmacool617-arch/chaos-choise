@@ -1,15 +1,17 @@
 package com.narezany.fastbuild;
 
-import com.narezany.fastbuild.network.NetworkHandler;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * Левый клик по блоку с палочкой в руке: блок не ломается, а координаты
- * уходят на сервер как точка выделения.
+ * становятся точкой выделения.
+ *
+ * В 1.7.10 это событие приходит ТОЛЬКО на сервере (ItemInWorldManager.onBlockClicked),
+ * на клиенте его не бывает — поэтому всё делаем здесь, без пакетов.
  */
 public class LeftClickHandler {
 
@@ -22,7 +24,10 @@ public class LeftClickHandler {
             return;
         }
         EntityPlayer player = event.entityPlayer;
-        if (player == null || player.worldObj == null || !player.worldObj.isRemote) {
+        if (player == null || player.worldObj == null || player.worldObj.isRemote) {
+            return;
+        }
+        if (!(player instanceof EntityPlayerMP)) {
             return;
         }
         ItemStack held = player.getCurrentEquippedItem();
@@ -30,6 +35,7 @@ public class LeftClickHandler {
             return;
         }
 
+        // блок не ломаем: сервер сам пришлёт клиенту его обратно
         event.setCanceled(true);
 
         long now = player.worldObj.getTotalWorldTime();
@@ -38,6 +44,6 @@ public class LeftClickHandler {
         }
         lastClick = now;
 
-        NetworkHandler.sendSelect(event.x, event.y, event.z);
+        SelectionStore.queueSelect(player.getCommandSenderName(), event.x, event.y, event.z);
     }
 }
