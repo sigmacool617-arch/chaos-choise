@@ -25,7 +25,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: fg12-${{ runner.os }}-${{ hashFiles('build.gradle', 'gradle.properties', 'fastbuild/build.gradle') }}
+          key: fg12-${{ runner.os }}-${{ hashFiles('build.gradle', 'gradle.properties', 'fastbuild/build.gradle', 'drill/build.gradle') }}
           restore-keys: |
             fg12-${{ runner.os }}-
 
@@ -45,6 +45,11 @@ jobs:
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2G"
 
+      - name: Build Drill
+        run: gradle -p drill build --no-daemon --stacktrace -Dorg.gradle.jvmargs=-Xmx2G
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2G"
+
       - name: Upload Chaos Choice
         uses: actions/upload-artifact@v4
         with:
@@ -57,4 +62,11 @@ jobs:
         with:
           name: FastBuild-1.7.10
           path: fastbuild/build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Upload Drill
+        uses: actions/upload-artifact@v4
+        with:
+          name: Drill-1.7.10
+          path: drill/build/libs/*.jar
           if-no-files-found: error

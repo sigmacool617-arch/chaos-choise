@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "drill",
+    "name": "Drill",
+    "description": "Бур: бурит квадрат 3x3 за 2.5 секунды. Прочность 3990, 1 единица за блок.",
+    "version": "${version}",
+    "mcversion": "1.7.10",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Narezany"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": ""
+  }
+]

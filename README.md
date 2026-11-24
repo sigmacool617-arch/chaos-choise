@@ -1,8 +1,8 @@
 # Chaos Choice — Forge 1.7.10
 
-> Второй мод в этом же репозитории — **FastBuild**, палочка быстрого строительства:
-> см. [README-fastbuild.md](README-fastbuild.md). Он собирается отдельным `.jar`
-> из папки `fastbuild/`.
+> Ещё два мода в этом же репозитории, каждый своим `.jar`:
+> **FastBuild** — палочка быстрого строительства ([README-fastbuild.md](README-fastbuild.md), папка `fastbuild/`);
+> **Drill** — бур 3×3 ([README-drill.md](README-drill.md), папка `drill/`).
 
 Мод для **Minecraft 1.7.10 + Forge**. Раз в минуту внизу экрана, прямо над
 шкалой опыта, появляется отсчёт **60 секунд** и меню с двумя случайными
