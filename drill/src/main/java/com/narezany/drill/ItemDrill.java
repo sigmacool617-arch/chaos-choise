@@ -1,9 +1,13 @@
 package com.narezany.drill;
 
+import java.util.UUID;
+
+import com.google.common.collect.Multimap;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 
@@ -13,10 +17,16 @@ import net.minecraft.item.ItemStack;
  */
 public class ItemDrill extends ItemPickaxe {
 
+    /**
+     * Свой UUID модификатора урона. Нужен свой, а не ванильный Item.field_111210_e,
+     * иначе он совпадёт с «Tool modifier», который ставит ItemTool.
+     */
+    private static final UUID DAMAGE_UUID = UUID.fromString("2b1d6a44-1a55-4b4e-9d3c-6a0e1f9b7c11");
+
     /** Сколько тиков занимает ломание любого блока. */
     private final float digTicks;
 
-    /** Урон по мобам. */
+    /** Урон по мобам, как он показывается в подсказке предмета. */
     private final float attackDamage;
 
     /**
@@ -60,10 +70,18 @@ public class ItemDrill extends ItemPickaxe {
         return hardness * 30.0F / digTicks;
     }
 
-    /** Урон бура по мобам. */
+    /**
+     * Урон в 1.7.10 задаётся не методом, а модификатором атрибута attackDamage.
+     * Карту родителя (ItemTool) чистим, чтобы кирка не добавляла свой урон
+     * поверх нашего, и кладём ровно один модификатор.
+     */
     @Override
-    public float getDamageVsEntity(Entity target) {
-        return attackDamage;
+    public Multimap getItemAttributeModifiers() {
+        Multimap map = super.getItemAttributeModifiers();
+        map.clear();
+        map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
+                new AttributeModifier(DAMAGE_UUID, "Drill damage", attackDamage, 0));
+        return map;
     }
 
     /** Полоска прочности видна всегда, а не только после первой царапины. */
