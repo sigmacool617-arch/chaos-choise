@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 public class Backpack {
 
     public static final String MODID = "backpack";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.1";
 
     @Mod.Instance(MODID)
     public static Backpack instance;
@@ -49,13 +49,13 @@ public class Backpack {
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
-        // 1 уровень: шесть кожаных туник и три ножниц
+        // 1 уровень: шесть кожаных туник и три нитки
         GameRegistry.addRecipe(new ItemStack(backpackLeather),
                 "LLL",
                 "SSS",
                 "LLL",
                 'L', Items.leather_chestplate,
-                'S', Items.shears);
+                'S', Items.string);
 
         // 2 уровень: первый рюкзак в центре, вокруг восемь железных слитков
         GameRegistry.addRecipe(new ItemStack(backpackIron),
