@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "titanium",
+    "name": "Titanium",
+    "description": "Титан: руда на высоте 9, плитки, слитки, броня (11720 прочности) и инструменты (7096 прочности).",
+    "version": "${version}",
+    "mcversion": "1.7.10",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Narezany"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": ""
+  }
+]

@@ -1,0 +1,4 @@
+item.backpack.t1.name=Leather Backpack
+item.backpack.t2.name=Iron Backpack
+item.backpack.t3.name=Diamond Backpack
+container.backpack=Backpack

@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "backpack",
+    "name": "Backpack",
+    "description": "Рюкзаки трёх уровней: 9, 18 и 27 слотов. Вещи хранятся в самом предмете.",
+    "version": "${version}",
+    "mcversion": "1.7.10",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Narezany"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": ""
+  }
+]

@@ -50,6 +50,16 @@ jobs:
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2G"
 
+      - name: Build Backpack
+        run: gradle -p backpack build --no-daemon --stacktrace -Dorg.gradle.jvmargs=-Xmx2G
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2G"
+
+      - name: Build Titanium
+        run: gradle -p titanium build --no-daemon --stacktrace -Dorg.gradle.jvmargs=-Xmx2G
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2G"
+
       - name: Upload Chaos Choice
         uses: actions/upload-artifact@v4
         with:
@@ -69,4 +79,18 @@ jobs:
         with:
           name: Drill-1.7.10
           path: drill/build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Upload Backpack
+        uses: actions/upload-artifact@v4
+        with:
+          name: Backpack-1.7.10
+          path: backpack/build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Upload Titanium
+        uses: actions/upload-artifact@v4
+        with:
+          name: Titanium-1.7.10
+          path: titanium/build/libs/*.jar
           if-no-files-found: error
