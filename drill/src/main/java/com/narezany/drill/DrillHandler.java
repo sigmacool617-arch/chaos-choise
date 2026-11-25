@@ -77,7 +77,7 @@ public class DrillHandler {
 
     private static ItemStack heldDrill(EntityPlayer player) {
         ItemStack held = player.getCurrentEquippedItem();
-        return held != null && held.getItem() == Drill.drill ? held : null;
+        return Drill.isDrill(held) ? held : null;
     }
 
     /** Грань, по которой кликнули; если клик не запомнился — смотрим, куда смотрит игрок. */

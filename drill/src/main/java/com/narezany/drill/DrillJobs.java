@@ -106,8 +106,7 @@ public final class DrillJobs {
             return;
         }
         // бур сломался — дальше не бурим
-        ItemStack held = player.getCurrentEquippedItem();
-        if (held == null || held.getItem() != Drill.drill) {
+        if (!Drill.isDrill(player.getCurrentEquippedItem())) {
             return;
         }
         if (!world.blockExists(x, y, z)) {
