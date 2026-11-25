@@ -3,8 +3,9 @@ package com.narezany.drill;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
@@ -112,6 +113,27 @@ public final class DrillJobs {
         if (!world.blockExists(x, y, z)) {
             return;
         }
+
+        Block block = world.getBlock(x, y, z);
+        if (block == null) {
+            return;
+        }
+        Material material = block.getMaterial();
+        if (material == Material.air || material.isLiquid()) {
+            // воздух и воду/лаву бур не «ломает» — только тратил бы прочность
+            return;
+        }
+        float hardness;
+        try {
+            hardness = block.getBlockHardness(world, x, y, z);
+        } catch (Throwable t) {
+            return;
+        }
+        if (hardness < 0.0F) {
+            // неразрушимое: бедрок, барьер, рамка портала Края и т.п.
+            return;
+        }
+
         player.theItemInWorldManager.tryHarvestBlock(x, y, z);
     }
 

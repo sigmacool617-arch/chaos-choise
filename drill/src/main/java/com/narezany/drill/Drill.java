@@ -23,7 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class Drill {
 
     public static final String MODID = "drill";
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.2.1";
 
     /* 20 тиков = 1 секунда */
     public static final float TICKS_IRON = 50.0F;    // 2.5 с
