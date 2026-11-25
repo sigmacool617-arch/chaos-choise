@@ -37,6 +37,6 @@ public class TitaniumArmor extends ItemArmor {
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-        return "titanium:textures/models/armor/titanium_layer_" + (slot == 2 ? 2 : 1) + ".png";
+        return "textures/models/armor/titanium_layer_" + (slot == 2 ? 2 : 1) + ".png";
     }
 }
