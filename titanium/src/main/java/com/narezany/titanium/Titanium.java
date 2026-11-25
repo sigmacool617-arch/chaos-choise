@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemSpade;
@@ -31,7 +32,7 @@ public class Titanium {
     public static Item.ToolMaterial TOOL_MATERIAL;
 
     /** 11720 прочности у каждого элемента брони. */
-    public static Item.ArmorMaterial ARMOR_MATERIAL;
+    public static ItemArmor.ArmorMaterial ARMOR_MATERIAL;
 
     public static final int ARMOR_DURABILITY = 11720;
     public static final int TOOL_DURABILITY = 7096;
