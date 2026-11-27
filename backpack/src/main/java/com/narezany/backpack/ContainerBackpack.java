@@ -11,10 +11,21 @@ public class ContainerBackpack extends Container {
     private final InventoryBackpack inventory;
     private final ItemStack stack;
 
+    /** Клиентская копия окна: только показывает содержимое. */
     public ContainerBackpack(EntityPlayer player, ItemStack stack) {
         this.stack = stack;
         this.inventory = new InventoryBackpack(stack);
+        addSlots(player);
+    }
 
+    /** Серверное окно: пишет прямо в рюкзак из слота инвентаря. */
+    public ContainerBackpack(EntityPlayer player, ItemStack stack, int slot) {
+        this.stack = stack;
+        this.inventory = new InventoryBackpack(player, slot, stack);
+        addSlots(player);
+    }
+
+    private void addSlots(EntityPlayer player) {
         int rows = inventory.getSizeInventory() / 9;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < 9; col++) {
@@ -44,6 +55,13 @@ public class ContainerBackpack extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         return true;
+    }
+
+    /** Пока окно открыто, держим NBT рюкзака свежим на сервере. */
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        inventory.markDirty();
     }
 
     @Override

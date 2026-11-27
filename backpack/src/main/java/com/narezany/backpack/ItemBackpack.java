@@ -30,9 +30,10 @@ public class ItemBackpack extends Item {
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        // открываем только на сервере: клиент откроет окно по пакету
+        // открываем только на сервере: клиент откроет окно по пакету.
+        // Номер слота передаём в x — сервер по нему найдёт рюкзак в инвентаре.
         if (!world.isRemote && !player.isSneaking()) {
-            player.openGui(Backpack.instance, tier, world, 0, 0, 0);
+            player.openGui(Backpack.instance, tier, world, player.inventory.currentItem, 0, 0);
         }
         return stack;
     }
