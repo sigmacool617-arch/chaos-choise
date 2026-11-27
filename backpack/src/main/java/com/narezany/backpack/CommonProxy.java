@@ -10,11 +10,12 @@ public class CommonProxy implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        ItemStack held;
         int slot = x;
+        ItemStack held = null;
         if (slot >= 0 && slot < player.inventory.mainInventory.length) {
             held = player.inventory.mainInventory[slot];
-        } else {
+        }
+        if (held == null || !(held.getItem() instanceof ItemBackpack)) {
             slot = player.inventory.currentItem;
             held = player.getCurrentEquippedItem();
         }
